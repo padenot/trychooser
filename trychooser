@@ -316,8 +316,11 @@ For all questions, choosing Y means adding something to the TryChooser string. C
     ui.write(_("Creates the trychooser mq entry...\n"))
     mq.new(ui, repo, 'trychooser', message=msg)
 
-    ui.write(_("Push to try server...\n"))
-    commands.push(ui, repo, "ssh://hg.mozilla.org/try", force=True)
+    if opts.get('pretend'):
+      ui.write(_("Pretending to push to try server...\n"))
+    else:
+      ui.write(_("Push to try server...\n"))
+      commands.push(ui, repo, "ssh://hg.mozilla.org/try", force=True)
 
     mq.pop(ui, repo)
     mq.delete(ui, repo, 'trychooser')
@@ -326,8 +329,11 @@ For all questions, choosing Y means adding something to the TryChooser string. C
   cmdtable = {
       "trychooser":
       (run_mercurial_command,
-        [('m', 'message', '', _('use text as try message'))],
-          _('hg trychooser [-m TEXT]')
+        [
+          ('p', 'pretend', False, _('don\'t push to the try server')),
+          ('m', 'message', '', _('use text as try message'))
+        ],
+        _('hg trychooser [-p] [-m TEXT]')
       )
   }
 
