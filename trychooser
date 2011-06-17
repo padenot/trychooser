@@ -267,6 +267,7 @@ else:
   from mercurial.i18n import _
   from mercurial import commands
   from mercurial import util
+  from mercurial.node import short
 
   class HG_interface:
 
@@ -322,8 +323,13 @@ For all questions, choosing Y means adding something to the TryChooser string. C
       ui.write(_("Push to try server...\n"))
       commands.push(ui, repo, "ssh://hg.mozilla.org/try", force=True)
 
+    push_id = short(repo.mq.applied[-1].node)
+
     mq.pop(ui, repo)
     mq.delete(ui, repo, 'trychooser')
+
+    tbpl_try_url = "http://tbpl.mozilla.org/?tree=Try&rev=" + push_id
+    ui.write(_("You can find your try results at the following URL:\n%s\n") % tbpl_try_url)
 
   # Mercurial interface
   cmdtable = {
