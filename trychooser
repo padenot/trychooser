@@ -325,7 +325,7 @@ For all questions, choosing Y means adding something to the TryChooser string. C
 
     push_id = short(repo.mq.applied[-1].node)
 
-    mq.pop(ui, repo)
+    mq.pop(ui, repo, Force=false, name='', all=False)
     mq.delete(ui, repo, 'trychooser')
 
     tbpl_try_url = "http://tbpl.mozilla.org/?tree=Try&rev=" + push_id
